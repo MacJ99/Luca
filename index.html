@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luca Cumple 2 - Carrera Total</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Racing+Sans+One&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --hw-blue: #003399;
+            --hw-orange: #ff6600;
+            --hw-yellow: #ffcc00;
+            --hw-red: #cc0000;
+            --dark: #111;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: var(--dark);
+            color: white;
+            font-family: 'Racing Sans One', sans-serif;
+            height: 100%;
+        }
+
+        /* Fondo principal */
+        .main-container {
+            background: radial-gradient(circle at center, #0044cc 0%, #001133 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        /* Partículas de fuego/chispas */
+        .particles {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Encabezado: Logo */
+        .logo-container {
+            position: relative;
+            z-index: 10;
+            animation: bounceIn 1s ease;
+            margin-top: 20px;
+        }
+
+        .hw-logo {
+            background: var(--hw-red);
+            padding: 10px 40px;
+            border: 5px solid white;
+            border-radius: 0 0 50px 50px;
+            box-shadow: 0 10px 0 var(--hw-orange);
+            transform: skew(-15deg);
+        }
+
+        .hw-logo h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 4rem;
+            margin: 0;
+            color: white;
+            text-shadow: 4px 4px 0px var(--hw-blue);
+            letter-spacing: 2px;
+        }
+
+        /* Sección del cumpleañero */
+        .profile-section {
+            z-index: 10;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .photo-frame {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 10px solid var(--hw-yellow);
+            box-shadow: 0 0 30px var(--hw-orange);
+            overflow: hidden;
+            margin: 0 auto;
+            position: relative;
+            animation: rotateGlow 4s infinite linear;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .name-banner {
+            font-family: 'Bangers', cursive;
+            font-size: 5rem;
+            color: white;
+            text-shadow: 8px 8px 0px var(--hw-blue);
+            margin: -25px 0 0 0;
+            text-transform: uppercase;
+        }
+
+        .age-badge {
+            background: linear-gradient(to bottom, var(--hw-yellow), var(--hw-orange));
+            color: var(--hw-red);
+            font-size: 4rem;
+            display: inline-block;
+            padding: 0 25px;
+            border-radius: 15px;
+            transform: rotate(-10deg);
+            border: 5px solid white;
+            box-shadow: 5px 5px 0 var(--dark);
+            margin-top: -15px;
+        }
+
+        /* Datos de la fiesta */
+        .info-card {
+            background: rgba(0, 0, 0, 0.85);
+            border: 4px solid var(--hw-orange);
+            padding: 25px;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            margin: 20px 0;
+            z-index: 10;
+        }
+
+        .info-card h2 {
+            font-family: 'Permanent Marker', cursive;
+            color: var(--hw-yellow);
+            font-size: 2.2rem;
+            margin: 0 0 15px 0;
+        }
+
+        .data-row {
+            font-size: 1.6rem;
+            margin: 10px 0;
+            border-bottom: 2px dashed #444;
+            padding-bottom: 5px;
+        }
+
+        .highlight {
+            color: var(--hw-orange);
+            font-weight: bold;
+        }
+
+        /* Botón Confirmar */
+        .btn-rsvp {
+            background: var(--hw-red);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.8rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Bangers', cursive;
+            transition: 0.3s;
+            margin: 10px 0;
+            box-shadow: 0 6px 0 #800000;
+            text-decoration: none;
+            display: inline-block;
+            z-index: 10;
+        }
+
+        .btn-rsvp:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: var(--hw-orange);
+        }
+
+        /* =========================================
+           NUEVA SECCIÓN: PISTA Y AUTO CREATIVO
+           ========================================= */
+        
+        /* Contenedor de la Pista Escénica */
+        .track-scene {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40vh; /* Ocupa el 40% inferior de la pantalla */
+            z-index: 2; /* Sobre las partículas, bajo la info */
+            overflow: visible; /* Permitir que el auto suba */
+        }
+
+        /* La Pista Base */
+        .main-track {
+            width: 150%; /* Más ancha para el movimiento lateral */
+            height: 20px;
+            background: #ff6600; /* Color naranja Hot Wheels */
+            border-top: 4px solid white;
+            position: absolute;
+            bottom: 50px;
+            left: -25%;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* Pista Central (gris carrera con líneas) */
+        .track-surface {
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                #333 0, #333 30px,
+                #eee 30px, #eee 60px
+            );
+        }
+
+        /* El Bucle (Looping) 3D */
+        .loop-container {
+            position: absolute;
+            bottom: 60px; /* Sobre la pista base */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 15px solid var(--hw-orange);
+            border-bottom-color: transparent; /* Efecto de entrada/salida */
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.7);
+            z-index: 3;
+        }
+
+        /* El Auto Deportivo Creativo (CSS PURO) */
+        .creative-car {
+            position: absolute;
+            bottom: 70px; /* Ligeramente sobre la pista */
+            left: -150px; /* Empieza fuera */
+            width: 100px;
+            height: 40px;
+            z-index: 5;
+            transform-origin: center center;
+            opacity: 0;
+            transition: left 0.1s linear, bottom 0.1s linear, transform 0.1s linear;
+        }
+
+        /* Cuerpo del auto */
+        .car-body {
+            width: 100%;
+            height: 100%;
+            background: var(--hw-blue);
+            border-radius: 10px 25px 5px 5px;
+            position: relative;
+            border: 2px solid white;
+            box-shadow: inset 0 5px 0 rgba(255,255,255,0.2);
+        }
+
+        /* Ventanas */
+        .car-window {
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            width: 30px;
+            height: 15px;
+            background: #88ccff;
+            border-radius: 5px 15px 0 0;
+        }
+
+        /* Llantas */
+        .car-wheel {
+            width: 20px;
+            height: 20px;
+            background: #111;
+            border: 3px solid #eee;
+            border-radius: 50%;
+            position: absolute;
+            bottom: -10px;
+            animation: spin 0.2s infinite linear;
+        }
+        .wheel-front { right: 10px; }
+        .wheel-back { left: 10px; }
+
+        /* Detalles de fuego/gráficos en el auto */
+        .car-decal {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 50px;
+            height: 15px;
+            background: linear-gradient(90deg, var(--hw-red), var(--hw-yellow));
+            clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+        }
+
+        /* Estela de fuego del auto */
+        .car-fire {
+            position: absolute;
+            top: 50%;
+            left: -30px;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 15px;
+            background: linear-gradient(-90deg, rgba(255,102,0,1), rgba(255,204,0,0));
+            border-radius: 10px;
+            filter: blur(2px);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        /* Animación de carrera completa (avanzar + loop + salir) */
+        @keyframes fullCircuit {
+            0% { left: -150px; bottom: 70px; transform: scale(1) rotate(0deg); opacity: 0; }
+            5% { opacity: 1; }
+            
+            /* Acercándose al loop */
+            20% { left: calc(50% - 130px); bottom: 70px; transform: scale(1) rotate(0deg); }
+            
+            /* Entrando al loop (giro boca arriba) */
+            25% { left: calc(50% - 80px); bottom: 100px; transform: scale(0.9) rotate(-45deg); }
+            
+            /* Boca abajo en la cima del loop */
+            35% { left: 50%; bottom: 210px; transform: scale(0.8) rotate(-180deg); }
+            
+            /* Saliendo del loop */
+            45% { left: calc(50% + 80px); bottom: 100px; transform: scale(0.9) rotate(-315deg); }
+            
+            /* Volviendo a la recta */
+            50% { left: calc(50% + 120px); bottom: 70px; transform: scale(1) rotate(-360deg); }
+            
+            /* Acelerando hacia la salida */
+            80% { left: 110%; bottom: 70px; transform: scale(1) rotate(-360deg); opacity: 1; }
+            
+            100% { left: 130%; bottom: 70px; transform: scale(1) rotate(-360deg); opacity: 0; }
+        }
+
+        /* Clase para activar la animación por JS */
+        .car-running {
+            animation: fullCircuit 5s forwards linear;
+        }
+
+        /* Botón extra para lanzar el carro */
+        .btn-launch {
+            background: var(--hw-yellow);
+            color: var(--dark);
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-family: 'Bangers';
+            border-radius: 10px;
+            z-index: 100;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        /* Animaciones base reusadas/ajustadas */
+        @keyframes bounceIn {
+            0% { transform: translateY(-200px) skew(-15deg); }
+            70% { transform: translateY(20px) skew(-15deg); }
+            100% { transform: translateY(0) skew(-15deg); }
+        }
+
+        @keyframes rotateGlow {
+            0% { box-shadow: 0 0 20px var(--hw-yellow); }
+            50% { box-shadow: 0 0 50px var(--hw-red); }
+            100% { box-shadow: 0 0 20px var(--hw-yellow); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <button class="btn-launch" onclick="launchCar()">🏎️ ¡ARRANCAR CARRERA!</button>
+
+    <div class="main-container">
+        <div class="particles" id="particles"></div>
+
+        <div class="logo-container">
+            <div class="hw-logo">
+                <h1>INVITACIÓN</h1>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <div class="photo-frame">
+                <img src="https://scontent-hou1-1.xx.fbcdn.net/v/t39.30808-6/526768063_23996376646683996_4836832056550218762_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=13d280&_nc_eui2=AeE3gosXzXiqTyRmj770s0-L3LXI_UKCCynctcj9QoILKWqoWukQHCcGdwejDZxywOk7cVk-x6CPNUkmCfXm-ICX&_nc_ohc=ufo_KGoRaMUQ7kNvwHWTpLl&_nc_oc=AdrFZpO94uG-gttcgT1yInv9ZB4pYXHr35EVSndu8Qx8BH7gD51yksAUqNzweDKG4yY&_nc_zt=23&_nc_ht=scontent-hou1-1.xx&_nc_gid=iEk1e03l2V0doEnTNwXEpw&_nc_ss=7a3a8&oh=00_Af0CYXYxogjG2ViWnJgdu64T9zDa4rXeBdQ_dpiTZNYscw&oe=69DC6D9E" alt="Luca">
+            </div>
+            <h1 class="name-banner">LUCA</h1>
+            <div class="age-badge">CUMPLE 2</div>
+        </div>
+
+        <div class="info-card">
+            <h2>¡PREPÁRATE PARA LA CARRERA!</h2>
+            <div class="data-row">
+                FECHA: <span class="highlight">SÁBADO 9 DE MAYO</span>
+            </div>
+            <div class="data-row">
+                HORA: <span class="highlight">4:00 PM</span>
+            </div>
+            <div class="data-row">
+                LUGAR: <span class="highlight">CURUNGUEO</span>
+            </div>
+            <p style="font-family: 'Permanent Marker'; font-size: 1.1rem; margin-top:10px;">¡NO FALTES, TE ESPERO EN LA PISTA!</p>
+        </div>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+        <a href="#" class="btn-rsvp" onclick="confirmar()">CONFIRMAR ASISTENCIA</a>
+
+        <div class="track-scene">
+            <div class="main-track">
+                <div class="track-surface"></div>
+            </div>
+
+            <div class="loop-container"></div>
+
+            <div class="creative-car" id="raceCar">
+                <div class="car-fire" id="carFire"></div> <div class="car-body">
+                    <div class="car-window"></div>
+                    <div class="car-decal"></div>
+                </div>
+                <div class="car-wheel wheel-front"></div>
+                <div class="car-wheel wheel-back"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Efecto de chispas/partículas cayendo
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 60; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.background = Math.random() > 0.5 ? '#ffcc00' : '#ff6600';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.borderRadius = '50%';
+                particle.style.opacity = Math.random();
+                particle.style.filter = 'blur(1px)';
+                
+                particle.animate([
+                    { transform: 'translateY(0) scale(1)', opacity: 0.8 },
+                    { transform: `translateY(${Math.random() * -600}px) scale(0)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 4000 + 2000,
+                    iterations: Infinity
+                });
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Función para lanzar el carro (animación compleja)
+        function launchCar() {
+            const car = document.getElementById('raceCar');
+            const fire = document.getElementById('carFire');
+
+            // Resetear animación si ya estaba corriendo
+            car.classList.remove('car-running');
+            void car.offsetWidth; // Trigger reflow para reiniciar
+
+            // Activar animación
+            car.classList.add('car-running');
+
+            // Controlar la estela de fuego (solo cuando va rápido)
+            setTimeout(() => { fire.style.opacity = 1; }, 500); // Aparece al arrancar
+            setTimeout(() => { fire.style.opacity = 0; }, 1200); // Desaparece al entrar al loop (gravedad lenta)
+            setTimeout(() => { fire.style.opacity = 1; }, 2500); // Vuelve al salir del loop
+            setTimeout(() => { fire.style.opacity = 0; }, 4500); // Desaparece al final
+        }
+
+        function confirmar() {
+            alert("¡Vroom Vroom! 🏎️ Registro recibido. ¡Prepárate para la velocidad en el Cumple de Luca!");
+        }
+
+        // Ejecutar al cargar
+        window.onload = () => {
+            createParticles();
+            // Lanzar el carro automáticamente después de 1 segundo
+            setTimeout(launchCar, 1500);
+        };
+
+        // Efecto Parallax suave al mover el mouse (ajustado para la nueva info)
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) / 60;
+            const moveY = (e.clientY - window.innerHeight / 2) / 60;
+            document.querySelector('.photo-frame').style.transform = `translate(${moveX}px, ${moveY}px)`;
+            document.querySelector('.info-card').style.transform = `translate(${-moveX/2}px, ${-moveY/2}px)`;
+        });
+    </script>
+</body>
+</html>
